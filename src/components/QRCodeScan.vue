@@ -189,13 +189,14 @@ const copyToClipboard = async () => {
  * Handle both an event of paste from clipboard and a button press 'Paste from clipboard'
  * @param event : ClipboardEvent | null
  */
-const pasteFromClipboard = async (event: ClipboardEvent | null) => {
+const pasteFromClipboard = async (event: Event | null) => {
   try {
     let file: File | null = null
 
-    if (event && event.clipboardData && event.clipboardData.items) {
+    const clipboardEvent = event as ClipboardEvent | null
+    if (clipboardEvent?.clipboardData?.items) {
       // user action Ctrl+V
-      file = await getFileFromDataTransferItemList(event.clipboardData.items)
+      file = await getFileFromDataTransferItemList(clipboardEvent.clipboardData.items)
     } else {
       // button press
       file = await getFileFromClipboardItems(await navigator.clipboard.read())
